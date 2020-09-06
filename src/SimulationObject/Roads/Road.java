@@ -1,12 +1,12 @@
 package SimulationObject.Roads;
 
-import SimulationObject.SimulationObject;
 import SimulationObject.Vehicle.Vehicle;
 import SimulationToolbox.Timeline;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public abstract class Road implements SimulationObject {
+public abstract class Road{
 
     public static final int DIRECTION_NORTH = 0;
     public static final int DIRECTION_SOUTH = 1;
@@ -21,6 +21,7 @@ public abstract class Road implements SimulationObject {
     protected int direction;
 
     protected ArrayList<Vehicle> vehicles;
+    protected HashMap<Integer, Object> roadData;
 
     public Road(String id, int direction) {
         this.direction = direction;
@@ -42,7 +43,6 @@ public abstract class Road implements SimulationObject {
             vehicle.init(timeline);
         }
     }
-
 }
 
 

@@ -1,5 +1,6 @@
 package SimulationObject.Vehicle;
 
+import SimulationObject.Roads.Road;
 import SimulationObject.SimulationObject;
 import SimulationObject.SimulationState;
 import SimulationToolbox.Timeline;
@@ -18,6 +19,7 @@ public class Vehicle implements SimulationObject {
     private int runState;
     private int speed;
     private int pos;
+    private Road road;
 
     private int waitingTime;
     private int waitingInstances;
@@ -69,5 +71,13 @@ public class Vehicle implements SimulationObject {
 
     public int getAverageWaitingTime() {
         return waitingInstances == 0 ? 0 : (int) waitingTime/waitingInstances;
+    }
+
+    public Road getRoad() {
+        return road;
+    }
+
+    public void setRoad(Road road) {
+        this.road = road;
     }
 }
