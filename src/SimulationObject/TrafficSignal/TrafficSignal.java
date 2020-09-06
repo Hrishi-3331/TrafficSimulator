@@ -5,6 +5,7 @@ import SimulationToolbox.Timeline;
 import SimulationObject.SimulationState;
 
 public class TrafficSignal implements SimulationObject {
+
     @Override
     public SimulationState getCurrentState() {
         return null;

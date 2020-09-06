@@ -38,7 +38,9 @@ public class Vehicle implements SimulationObject {
 
     @Override
     public void simulate() {
-
+        for (int i = 0; i < speed; i++){
+            this.pos++;
+        }
     }
 
     @Override
@@ -46,6 +48,22 @@ public class Vehicle implements SimulationObject {
         this.timeline = timeLine;
         this.runState = Vehicle.STATE_RUNNING;
         this.speed = 30 + new Random().nextInt(20);
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
+
+    public int getRunState() {
+        return runState;
+    }
+
+    public void setRunState(int runState) {
+        this.runState = runState;
     }
 
     public void waitUntilGreen(){
