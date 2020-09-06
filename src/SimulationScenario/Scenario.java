@@ -24,7 +24,7 @@ public abstract class Scenario {
         }
     }
 
-    public void run(){
+    void run(){
 
     }
 }

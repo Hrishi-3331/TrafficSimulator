@@ -1,5 +1,6 @@
 package SimulationObject.Roads;
 
+import SimulationObject.TrafficSignal.TrafficSignal;
 import SimulationObject.Vehicle.Vehicle;
 import SimulationToolbox.Timeline;
 
@@ -32,6 +33,25 @@ public abstract class Road{
             orientation = Road.ORIENTATION_HORIZONTAL;
         }
         vehicles = new ArrayList<>();
+    }
+
+    public void check(Vehicle vehicle){
+        if (roadData.get(vehicle.getPos()) == null) {
+            return;
+        }
+        else{
+            Object o = roadData.get(vehicle.getPos());
+
+            if (o instanceof TrafficSignal){
+                TrafficSignal signal = (TrafficSignal)o;
+                if (signal.getSignalState() == TrafficSignal.STATE_RED && vehicle.getRunState() == Vehicle.STATE_RUNNING){
+                    vehicle.waitUntilGreen();
+                }
+                else if (signal.getSignalState() == TrafficSignal.STATE_GREEN && vehicle.getRunState() == Vehicle.STATE_WAITING){
+                    vehicle.goUntilRed();
+                }
+            }
+        }
     }
 
     public abstract void bind(Vehicle vehicle);

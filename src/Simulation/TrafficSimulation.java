@@ -14,5 +14,5 @@ public final class TrafficSimulation {
     public static final int TRAFFIC_INTENSITY_HEAVY = 4;
     public static final int TRAFFIC_INTENSITY_LIGHT = 5;
     public static final int TRAFFIC_INTENSITY_MODERATE = 6;
-
+    public static final int TRAFFIC_FREE_STYLE = 7;
 }

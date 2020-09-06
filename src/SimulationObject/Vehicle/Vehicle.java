@@ -1,13 +1,16 @@
 package SimulationObject.Vehicle;
 
+import SimAnimation.Animatable;
 import SimulationObject.Roads.Road;
 import SimulationObject.SimulationObject;
 import SimulationObject.SimulationState;
 import SimulationToolbox.Timeline;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.util.Random;
 
-public class Vehicle implements SimulationObject {
+public class Vehicle implements SimulationObject, Animatable {
 
     public static int STATE_RUNNING = 0;
     public static int STATE_WAITING = 1;
@@ -39,8 +42,10 @@ public class Vehicle implements SimulationObject {
     @Override
     public void simulate() {
         for (int i = 0; i < speed; i++){
-            this.pos++;
+            if (this.getRunState() == Vehicle.STATE_RUNNING) this.pos++;
+            road.check(this);
         }
+        this.state = new VehicleState(this);
     }
 
     @Override
@@ -48,6 +53,11 @@ public class Vehicle implements SimulationObject {
         this.timeline = timeLine;
         this.runState = Vehicle.STATE_RUNNING;
         this.speed = 30 + new Random().nextInt(20);
+        this.state = new VehicleState(this);
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     public int getPos() {
@@ -98,4 +108,19 @@ public class Vehicle implements SimulationObject {
     public void setRoad(Road road) {
         this.road = road;
     }
+
+    @Override
+    public void draw(Graphics graphics) {
+        Graphics2D plane = (Graphics2D)graphics;
+        try {
+            Image img = ImageIO.read(getClass().getResourceAsStream("/red_car.png"));
+            plane.drawImage(img, pos, 400, 60, 40, null);
+        }
+        catch (Exception e){
+            System.out.println("Error in drawing animatable object " + this.getId());
+            plane.setColor(Color.red);
+            plane.fillRect(pos,500, 100, 100);
+        }
+    }
+
 }
