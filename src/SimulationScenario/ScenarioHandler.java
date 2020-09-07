@@ -14,6 +14,8 @@ public class ScenarioHandler {
 
     public void run(){
         scenario.initSim(timeline);
-
+        while (!timeline.isExpired()){
+            scenario.run();
+        }
     }
 }

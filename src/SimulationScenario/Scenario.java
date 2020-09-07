@@ -6,25 +6,26 @@ import SimulationToolbox.Timeline;
 import java.util.ArrayList;
 
 public abstract class Scenario {
-    protected ArrayList<SimulationObject> dynamicSimulatables;
-    protected ArrayList<SimulationObject> staticSimulatables;
+    protected ArrayList<SimulationObject> simulatables;
 
     public Scenario() {
-        dynamicSimulatables = new ArrayList<SimulationObject>();
-        staticSimulatables  = new ArrayList<SimulationObject>();
+        simulatables  = new ArrayList<SimulationObject>();
     }
 
-    public void initSim(Timeline timeline){
-        for (SimulationObject object : dynamicSimulatables){
+    void initSim(Timeline timeline){
+        for (SimulationObject object : simulatables){
             object.init(timeline);
         }
+    }
 
-        for (SimulationObject object : staticSimulatables){
-            object.init(timeline);
-        }
+    public void addSimulatable(SimulationObject object){
+        if (object == null) return;
+        this.simulatables.add(object);
     }
 
     void run(){
-
+        for (SimulationObject o : simulatables){
+            o.simulate();
+        }
     }
 }
