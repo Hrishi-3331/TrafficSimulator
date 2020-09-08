@@ -11,10 +11,13 @@ public class SimFrame extends JFrame {
     private SimPanel panel;
     private Timeline timeline;
     private ArrayList<Road> roadMap;
+    private SimulationGraphicProperties properties;
 
-    public SimFrame(Timeline timeline, ArrayList<Road> roadMap){
+    public SimFrame(Timeline timeline, ArrayList<Road> roadMap, SimulationGraphicProperties properties){
         this.timeline = timeline;
         this.roadMap = roadMap;
+        this.properties = properties;
+        panel = new SimPanel(timeline, roadMap, properties);
     }
 
     public void runAnimation(){

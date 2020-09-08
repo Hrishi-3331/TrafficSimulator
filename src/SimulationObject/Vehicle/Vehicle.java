@@ -1,6 +1,7 @@
 package SimulationObject.Vehicle;
 
 import SimAnimation.Animatable;
+import SimAnimation.SimulationGraphicProperties;
 import SimulationObject.Roads.Road;
 import SimulationObject.SimulationObject;
 import SimulationObject.SimulationState;
@@ -18,6 +19,7 @@ public class Vehicle implements SimulationObject, Animatable {
     private String id;
     private VehicleState state;
     private Timeline timeline;
+    private GraphicProperties properties;
 
     private int runState;
     private int speed;
@@ -109,4 +111,18 @@ public class Vehicle implements SimulationObject, Animatable {
         this.road = road;
     }
 
+    public int getFacing(){
+        return this.road.getDirection();
+    }
+
+    @Override
+    public GraphicProperties getGraphicProperties() {
+        return this.properties;
+    }
+
+    @Override
+    public void configureGraphicProperties(SimulationGraphicProperties properties) {
+        GraphicProperties.Builder builder = new GraphicProperties.Builder();
+
+    }
 }

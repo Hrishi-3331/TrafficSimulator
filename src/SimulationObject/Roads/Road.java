@@ -1,6 +1,7 @@
 package SimulationObject.Roads;
 
 import SimAnimation.Animatable;
+import SimAnimation.SimulationGraphicProperties;
 import SimulationObject.TrafficSignal.TrafficSignal;
 import SimulationObject.Vehicle.Vehicle;
 
@@ -20,6 +21,7 @@ public abstract class Road implements Animatable {
     protected String id;
     protected int orientation;
     protected int direction;
+    protected GraphicProperties graphicProperties;
 
     protected ArrayList<Vehicle> vehicles;
     protected HashMap<Integer, Object> roadData;
@@ -54,6 +56,10 @@ public abstract class Road implements Animatable {
         }
     }
 
+    public String getId(){
+        return this.id;
+    }
+
     public int getOrientation() {
         return orientation;
     }
@@ -64,7 +70,32 @@ public abstract class Road implements Animatable {
 
     public abstract void bind(Vehicle vehicle);
 
-    public abstract void configureAnim();
+    @Override
+    public GraphicProperties getGraphicProperties() {
+        return this.graphicProperties;
+    }
+
+    @Override
+    public void configureGraphicProperties(SimulationGraphicProperties simulationGraphicProperties) {
+        GraphicProperties.Builder builder = new GraphicProperties.Builder();
+        if (this.getOrientation() == Road.ORIENTATION_HORIZONTAL){
+            this.graphicProperties = builder.setXpos(0)
+                    .setYpos(simulationGraphicProperties.getRoadHorizontalPos())
+                    .setWidth(simulationGraphicProperties.getRoadHorizontalLength())
+                    .setHeight(simulationGraphicProperties.getRoadHorizontalWidth())
+                    .build();
+
+            System.out.println("Road pos : " + graphicProperties.getXpos() + ", " + graphicProperties.getYpos());
+        }
+        else if (this.getOrientation() == Road.ORIENTATION_VERTICAL){
+            this.graphicProperties = builder.setYpos(0)
+                    .setXpos(simulationGraphicProperties.getRoadVerticalPos())
+                    .setWidth(simulationGraphicProperties.getRoadVerticalWidth())
+                    .setHeight(simulationGraphicProperties.getRoadVerticalLength())
+                    .build();
+            System.out.println("Road pos : " + graphicProperties.getXpos() + ", " + graphicProperties.getYpos());
+        }
+    }
 }
 
 

@@ -18,7 +18,7 @@ public class Timeline {
         SnapMap = new HashMap<>();
     }
 
-    public Timeline(int duration){
+    public Timeline(double duration){
         this();
         this.DURATION = duration;
     }

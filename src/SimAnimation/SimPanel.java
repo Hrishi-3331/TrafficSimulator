@@ -19,25 +19,42 @@ public class SimPanel extends JPanel implements ActionListener {
     private double instance = 0;
     private Timeline timeline;
     private ArrayList<Road> roadMap;
+    private SimulationGraphicProperties properties;
 
-    public SimPanel(Timeline timeline, ArrayList<Road> roadMap){
+    public SimPanel(Timeline timeline, ArrayList<Road> roadMap, SimulationGraphicProperties properties){
         this.timeline = timeline;
         this.roadMap = roadMap;
+        this.properties = properties;
+        initGraphics();
         timer.addActionListener(this);
         timer.start();
     }
 
+    private void initGraphics(){
+        for (Road road : roadMap){
+            road.configureGraphicProperties(properties);
+        }
+    }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        this.setBackground(Color.green);
         for (Road road : roadMap){
             Animatable.draw(g, road);
         }
         HashMap<Double, TimeSnap> snapMap = timeline.getSnapMap();
         TimeSnap snap = snapMap.get(instance);
+        if (snap == null){
+            timer.stop();
+            return;
+        }
         HashMap<SimulationObject, SimulationState> map = snap.getStateMap();
         ArrayList<SimulationObject> objects = new ArrayList<>(map.keySet());
         for (SimulationObject object : objects){
-            Animatable.draw(g, object, map.get(object));
+            if (object instanceof Animatable) {
+                ((Animatable)object).configureGraphicProperties(properties);
+                Animatable.draw(g, object, map.get(object));
+            }
         }
     }
 
@@ -45,6 +62,6 @@ public class SimPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         this.repaint();
         instance++;
-        if (instance == timeline.getCurrentInstance()) timer.stop();
+        if (instance == timeline.getCurrentInstance()-1) timer.stop();
     }
 }

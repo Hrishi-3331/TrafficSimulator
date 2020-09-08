@@ -16,6 +16,8 @@ public abstract class Scenario {
         roadMap = new ArrayList<>();
     }
 
+    public abstract void buildScenario();
+
     void initSim(Timeline timeline){
         for (SimulationObject object : simulatables){
             object.init(timeline);

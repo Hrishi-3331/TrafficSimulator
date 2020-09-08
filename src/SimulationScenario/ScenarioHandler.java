@@ -1,6 +1,7 @@
 package SimulationScenario;
 
 import SimAnimation.SimFrame;
+import SimAnimation.SimulationGraphicProperties;
 import Simulation.TrafficSimulation;
 import SimulationToolbox.TimeSnap;
 import SimulationToolbox.Timeline;
@@ -23,6 +24,7 @@ public class ScenarioHandler {
     }
 
     public void run(){
+        scenario.buildScenario();
         System.out.println("Initializing simulation....");
         scenario.initSim(timeline);
         System.out.println("Simulation started");
@@ -35,7 +37,9 @@ public class ScenarioHandler {
         System.out.println("Simulation complete.");
         if (mode == TrafficSimulation.MODE_ANIMATION){
             System.out.println("Loading animations");
-            SimFrame frame = new SimFrame(timeline, scenario.getRoadMap());
+            SimulationGraphicProperties properties = new SimulationGraphicProperties();
+            properties.configureDefaultGraphicProperties(scenario.getRoadMap(), SimulationGraphicProperties.ZOOM_0X);
+            SimFrame frame = new SimFrame(timeline, scenario.getRoadMap(), properties);
             frame.runAnimation();
         }
         else if (mode == TrafficSimulation.MODE_LOGS){

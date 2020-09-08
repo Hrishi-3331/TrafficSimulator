@@ -12,9 +12,4 @@ public class OneWayRoad extends Road{
     public void bind(Vehicle vehicle) {
         vehicle.setRoad(this);
     }
-
-    @Override
-    public void configureAnim() {
-
-    }
 }

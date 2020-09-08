@@ -12,35 +12,37 @@ import java.awt.*;
 
 public interface Animatable {
 
-    int TYPE_STATIC = 0;
-    int TYPE_DYNAMIC = 1;
-
     static void draw(Graphics graphics, SimulationObject object, SimulationState state){
         Graphics2D canvas = (Graphics2D)graphics;
         if (object instanceof Vehicle){
             VehicleState vehicleState = (VehicleState)state;
+            GraphicProperties vehicleGraphicProperties = ((Vehicle)object).getGraphicProperties();
             int Xpos = 0;
             int Ypos = 0;
-            int width = 0;
-            int height = 0;
+            int width = vehicleGraphicProperties.getWidth();
+            int height = vehicleGraphicProperties.getHeight();
             Road road = vehicleState.getRoad();
             Image vehicle_image = null;
             try {
                 switch (road.getDirection()) {
                     case Road.DIRECTION_NORTH:
-                        ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_north.png"));
+                        vehicle_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_north.png"));
+                        Ypos = vehicleState.getPos();
                         break;
 
                     case Road.DIRECTION_SOUTH:
-                        ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_south.png"));
+                        vehicle_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_south.png"));
+                        Ypos = vehicleState.getPos();
                         break;
 
                     case Road.DIRECTION_EAST:
-                        ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_east.png"));
+                        vehicle_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_east.png"));
+                        Xpos = vehicleState.getPos();
                         break;
 
                     case Road.DIRECTION_WEST:
-                        ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_west.png"));
+                        vehicle_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/red_car_west.png"));
+                        Xpos = vehicleState.getPos();
                         break;
                 }
                 canvas.drawImage(vehicle_image, Xpos, Ypos, width, height, null);
@@ -55,63 +57,104 @@ public interface Animatable {
 
     static void draw(Graphics graphics, Road road){
         Graphics2D canvas = (Graphics2D)graphics;
-        if (road.getOrientation() == Road.ORIENTATION_HORIZONTAL){
-
-        }
-        else if (road.getOrientation() == Road.ORIENTATION_VERTICAL){
-
+        GraphicProperties properties = road.getGraphicProperties();
+        Image road_image = null;
+        try {
+            if (road.getOrientation() == Road.ORIENTATION_HORIZONTAL) {
+                road_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/road.jpg"));
+            } else if (road.getOrientation() == Road.ORIENTATION_VERTICAL) {
+                road_image = ImageIO.read(SimFrame.class.getClassLoader().getResourceAsStream("res/road_v.jpg"));
+            }
+            System.out.println("Drawing " + road.getId() + " at " + (int) properties.getXpos() + " , " + (int) properties.getYpos());
+            canvas.drawImage(road_image, (int) properties.getXpos(), (int) properties.getYpos(), properties.getWidth(), properties.getHeight(), null);
+        }catch (Exception e){
+            System.out.println("Error in loading road graphics");
         }
     }
 
+    GraphicProperties getGraphicProperties();
+
+    void configureGraphicProperties(SimulationGraphicProperties properties);
+
     class GraphicProperties{
-        double Xpos;
-        double Ypos;
-        int width;
-        int height;
-        Color color;
+        private double Xpos;
+        private double Ypos;
+        private int width;
+        private int height;
+        private Color color;
 
         public GraphicProperties() {
 
+        }
+
+        public GraphicProperties(double xpos, double ypos, int width, int height, Color color) {
+            Xpos = xpos;
+            Ypos = ypos;
+            this.width = width;
+            this.height = height;
+            this.color = color;
         }
 
         public double getXpos() {
             return Xpos;
         }
 
-        public void setXpos(double xpos) {
-            Xpos = xpos;
-        }
-
         public double getYpos() {
             return Ypos;
-        }
-
-        public void setYpos(double ypos) {
-            Ypos = ypos;
         }
 
         public int getWidth() {
             return width;
         }
 
-        public void setWidth(int width) {
-            this.width = width;
-        }
-
         public int getHeight() {
             return height;
-        }
-
-        public void setHeight(int height) {
-            this.height = height;
         }
 
         public Color getColor() {
             return color;
         }
 
-        public void setColor(Color color) {
-            this.color = color;
+        public static class Builder{
+
+            private double Xpos;
+            private double Ypos;
+            private int width;
+            private int height;
+            private Color color;
+
+            public Builder(){
+
+            }
+
+            public Builder setXpos(int xpos){
+                this.Xpos = xpos;
+                return this;
+            }
+
+            public Builder setYpos(int ypos){
+                this.Ypos = ypos;
+                return this;
+            }
+
+            public Builder setWidth(int width){
+                this.width = width;
+                return this;
+            }
+
+            public Builder setHeight(int height){
+                this.height = height;
+                return this;
+            }
+
+            public Builder setColor(Color color){
+                this.color = color;
+                return this;
+            }
+
+            public GraphicProperties build(){
+                return new GraphicProperties(Xpos, Ypos, width, height, color);
+            }
         }
     }
 }
