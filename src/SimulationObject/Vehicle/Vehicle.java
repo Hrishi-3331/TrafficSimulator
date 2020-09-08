@@ -109,18 +109,4 @@ public class Vehicle implements SimulationObject, Animatable {
         this.road = road;
     }
 
-    @Override
-    public void draw(Graphics graphics) {
-        Graphics2D plane = (Graphics2D)graphics;
-        try {
-            Image img = ImageIO.read(getClass().getResourceAsStream("/red_car.png"));
-            plane.drawImage(img, pos, 400, 60, 40, null);
-        }
-        catch (Exception e){
-            System.out.println("Error in drawing animatable object " + this.getId());
-            plane.setColor(Color.red);
-            plane.fillRect(pos,500, 100, 100);
-        }
-    }
-
 }

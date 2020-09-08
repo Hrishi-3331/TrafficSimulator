@@ -1,13 +1,13 @@
 package SimulationObject.Roads;
 
+import SimAnimation.Animatable;
 import SimulationObject.TrafficSignal.TrafficSignal;
 import SimulationObject.Vehicle.Vehicle;
-import SimulationToolbox.Timeline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class Road{
+public abstract class Road implements Animatable {
 
     public static final int DIRECTION_NORTH = 0;
     public static final int DIRECTION_SOUTH = 1;
@@ -54,15 +54,17 @@ public abstract class Road{
         }
     }
 
+    public int getOrientation() {
+        return orientation;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
     public abstract void bind(Vehicle vehicle);
 
     public abstract void configureAnim();
-
-    public void init(Timeline timeline) {
-        for (Vehicle vehicle : vehicles) {
-            vehicle.init(timeline);
-        }
-    }
 }
 
 

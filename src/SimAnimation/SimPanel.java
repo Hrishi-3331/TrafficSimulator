@@ -1,45 +1,50 @@
 package SimAnimation;
 
-import javax.imageio.ImageIO;
+import SimulationObject.Roads.Road;
+import SimulationObject.SimulationObject;
+import SimulationObject.SimulationState;
+import SimulationToolbox.TimeSnap;
+import SimulationToolbox.Timeline;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SimPanel extends JPanel implements ActionListener {
 
     private Timer timer = new Timer(100, this);
-    int index = 1;
-    int pos;
-    private ArrayList<Integer> positions;
+    private double instance = 0;
+    private Timeline timeline;
+    private ArrayList<Road> roadMap;
 
-    public SimPanel(ArrayList<Integer> positions){
-        this.positions = positions;
-        pos = positions.get(0);
+    public SimPanel(Timeline timeline, ArrayList<Road> roadMap){
+        this.timeline = timeline;
+        this.roadMap = roadMap;
+        timer.addActionListener(this);
         timer.start();
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        this.setBackground(Color.green);
-        Graphics2D car = (Graphics2D)g;
-        try {
-            Image img = ImageIO.read(getClass().getResourceAsStream("/red_car.png"));
-            car.drawImage(img, pos, 400, 60, 40, null);
+        for (Road road : roadMap){
+            Animatable.draw(g, road);
         }
-        catch (Exception e){
-            car.setColor(Color.red);
-            car.fillOval(pos,500, 100, 100);
+        HashMap<Double, TimeSnap> snapMap = timeline.getSnapMap();
+        TimeSnap snap = snapMap.get(instance);
+        HashMap<SimulationObject, SimulationState> map = snap.getStateMap();
+        ArrayList<SimulationObject> objects = new ArrayList<>(map.keySet());
+        for (SimulationObject object : objects){
+            Animatable.draw(g, object, map.get(object));
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        pos = positions.get(index++);
         this.repaint();
-
-        //System.out.println(index + " value : " + positions.get(index));
-        if (index == positions.size()) timer.stop();
+        instance++;
+        if (instance == timeline.getCurrentInstance()) timer.stop();
     }
 }
